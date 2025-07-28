@@ -269,7 +269,7 @@ content h1{
 @media (max-width: 440px){
   .main-container .image{
     width: 50%;
-    height: 60%;
+    height: 30%;
     margin: 30px
   }
 
