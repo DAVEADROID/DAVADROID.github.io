@@ -11,8 +11,8 @@ function cancel(){
 //TypeWriter Effect
 
 const texts = [
-    "SOFTWARE ENGINEER",
     "IT PROFESSIONAL",
+    "CYBERSECURITY POROFFESIONAL",
 ]
 
 let speed = 100;
