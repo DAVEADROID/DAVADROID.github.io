@@ -40,7 +40,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -153,7 +153,7 @@
             <span class="status status-ok"><span class="dot" aria-hidden="true"></span>Issued Oct 2026</span>
           </div>
           <h3 class="cert-name">Security+ ce</h3>
-          <!-- TODO: add Credly/CompTIA verification link for Security+ ce when provided -->
+          <a class="cert-link" href="https://www.credly.com/badges/9d8844e7-86c4-47c1-a3fa-57a2b5d00797/public_url" target="_blank" rel="noopener">Verify on Credly<span class="sr-only"> (CompTIA Security+, opens in a new tab)</span> <span aria-hidden="true">&#8599;</span></a>
         </li>
         <li class="cert reveal">
           <div class="cert-top">
@@ -161,7 +161,7 @@
             <span class="status status-ok"><span class="dot" aria-hidden="true"></span>Oct 2026</span>
           </div>
           <h3 class="cert-name">Secure Infrastructure Specialist (CSIS)</h3>
-          <!-- TODO: add verification link for CSIS when provided -->
+          <a class="cert-link" href="https://www.credly.com/badges/15b7b2c0-8613-4271-8bf7-cf76ea39679c/public_url" target="_blank" rel="noopener">Verify on Credly<span class="sr-only"> (CompTIA CSIS, opens in a new tab)</span> <span aria-hidden="true">&#8599;</span></a>
         </li>
         <li class="cert reveal">
           <div class="cert-top">
@@ -169,7 +169,7 @@
             <span class="status status-ok"><span class="dot" aria-hidden="true"></span>Jul 2026</span>
           </div>
           <h3 class="cert-name">IT Operations Specialist (CIOS)</h3>
-          <!-- TODO: add verification link for CIOS when provided -->
+          <a class="cert-link" href="https://www.credly.com/badges/1b776242-9db4-4756-8807-78767dc46526/public_url" target="_blank" rel="noopener">Verify on Credly<span class="sr-only"> (CompTIA CIOS, opens in a new tab)</span> <span aria-hidden="true">&#8599;</span></a>
         </li>
         <li class="cert reveal">
           <div class="cert-top">
@@ -177,7 +177,7 @@
             <span class="status status-ok"><span class="dot" aria-hidden="true"></span>Jul 2026</span>
           </div>
           <h3 class="cert-name">Network+ ce</h3>
-          <!-- TODO: add verification link for Network+ ce when provided -->
+          <a class="cert-link" href="https://www.credly.com/badges/2f6be494-8941-45f9-814f-cb9d23c63c92/public_url" target="_blank" rel="noopener">Verify on Credly<span class="sr-only"> (CompTIA Network+, opens in a new tab)</span> <span aria-hidden="true">&#8599;</span></a>
         </li>
         <li class="cert reveal">
           <div class="cert-top">
@@ -185,7 +185,7 @@
             <span class="status status-ok"><span class="dot" aria-hidden="true"></span>Mar 2026</span>
           </div>
           <h3 class="cert-name">Certified in Cybersecurity (CC)</h3>
-          <!-- TODO: add verification link for ISC2 CC when provided -->
+          <a class="cert-link" href="https://www.credly.com/badges/a85d251a-7cec-4177-9d87-1d6730869a2f/public_url" target="_blank" rel="noopener">Verify on Credly<span class="sr-only"> (ISC2 CC, opens in a new tab)</span> <span aria-hidden="true">&#8599;</span></a>
         </li>
         <li class="cert reveal">
           <div class="cert-top">
@@ -289,7 +289,6 @@
             <span class="status status-ok"><span class="dot" aria-hidden="true"></span>Chain valid</span>
             <span class="pki-status-text">Client follows the chain from the intranet certificate to ACME-LAB-ISSUING to ACME-LAB-ROOT, which it trusts.</span>
           </p>
-          <!-- TODO: add real lab screenshots (certificate chain, CRL, MITM warning) when provided. Do not use placeholders. -->
         </div>
 
         <!-- Write-up -->
@@ -305,6 +304,15 @@
               <li>Configured certificate issuance for internal HTTPS on IIS.</li>
               <li>Worked hands-on with certificate chains, trust, validation, and CRLs.</li>
               <li>Ran a man-in-the-middle simulation with a rogue certificate authority to show how certificate validation fails.</li>
+            </ul>
+          </div>
+          <div class="writeup-block reveal">
+            <h3>What stood out</h3>
+            <ul class="check-list">
+              <li><strong>SAN, not CN.</strong> My first certificate looked correct but the browser rejected it. Modern browsers match the hostname against the Subject Alternative Name, not the Common Name, so I built a proper request by hand.</li>
+              <li><strong>Trust is local.</strong> Pulling the Root CA out of a client's trust store turned the same certificate from trusted to rejected and back. Trust is a decision each machine makes, not something the certificate carries.</li>
+              <li><strong>Owning a CA is not enough.</strong> A certificate forged with a separate, untrusted CA was rejected instantly. Running a CA and getting it trusted are two very different problems.</li>
+              <li><strong>Revocation soft-fails.</strong> After revoking a certificate to simulate a compromised key, the browser still let connections through. I used certutil to prove the revocation was working on the CA side.</li>
             </ul>
           </div>
           <div class="writeup-block reveal">
@@ -324,8 +332,12 @@
               <li>VMware Workstation Pro</li>
               <li>Windows 11 host</li>
             </ul>
-            <!-- TODO: link the LinkedIn post about this project when the URL is provided -->
           </div>
+          <figure class="writeup-block lab-shot reveal">
+            <img src="pki-cert-path.webp" width="640" height="696" loading="lazy" decoding="async" alt="Windows Certificate dialog, Certification Path tab: ACME-LAB-ROOT, then ACME-LAB-ISSUING, then intranet.acme-lab.local. Certificate status: This certificate is OK.">
+            <figcaption>From the lab: the intranet certificate chains through ACME-LAB-ISSUING to ACME-LAB-ROOT, and Windows reports it as valid.</figcaption>
+            <a class="text-link" href="https://lnkd.in/p/gkVAs5Yh" target="_blank" rel="noopener">Read the LinkedIn post about this lab<span class="sr-only"> (opens in a new tab)</span> <span aria-hidden="true">&#8599;</span></a>
+          </figure>
         </div>
       </div>
     </section>
@@ -398,7 +410,16 @@
           <ul class="tag-list" aria-label="Stack">
             <li>Unity</li><li>C#</li><li>Git</li>
           </ul>
-          <!-- TODO: link to the game or repo if one exists -->
+        </article>
+
+        <article class="project-card project-card-small reveal">
+          <p class="mono-label">creative coding</p>
+          <h3>p5.js sketches</h3>
+          <p>A collection of coding experiments and interactive sketches built with p5.js, HTML, CSS, and JavaScript.</p>
+          <ul class="tag-list" aria-label="Stack">
+            <li>p5.js</li><li>HTML</li><li>CSS</li><li>JavaScript</li>
+          </ul>
+          <a class="text-link" href="https://github.com/DAVEADROID/ProgDigMedia" target="_blank" rel="noopener">View on GitHub<span class="sr-only"> (p5.js sketches, opens in a new tab)</span> <span aria-hidden="true">&#8599;</span></a>
         </article>
       </div>
     </section>
@@ -524,6 +545,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=2" defer></script>
+  <script src="script.js?v=3" defer></script>
 </body>
 </html>
